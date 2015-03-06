@@ -2,9 +2,9 @@
 
 [![npm version](https://badge.fury.io/js/passport-google-plus-token.svg)](http://badge.fury.io/js/passport-google-plus-token) [![Build Status](https://travis-ci.org/ghaiklor/passport-google-plus-token.svg?branch=master)](https://travis-ci.org/ghaiklor/passport-google-plus-token)
 
-[Passport](http://passportjs.org/) strategies for authenticating with Google Plus OAuth2 access tokens.
+[Passport](http://passportjs.org/) strategy for authenticating with [Google Plus](https://plus.google.com/) access tokens using the OAuth 2.0 API.
 
-This module lets you authenticate using Google Plus in your Node.js applications by access tokens.
+This module lets you authenticate using Google Plus in your Node.js applications.
 By plugging into Passport, Google Plus authentication can be easily and unobtrusively integrated into any application or framework that supports [Connect](http://www.senchalabs.org/connect/)-style middleware, including [Express](http://expressjs.com/).
 
 ## Installation
@@ -17,8 +17,8 @@ npm install passport-google-plus-token
 
 ### Configure Strategy
 
-The Google Plus authentication strategy authenticates users using a Google Plus account and OAuth2 access tokens.
-The strategy requires a `verify` callback, which accepts accessToken, refreshToken, profile and calls `done` providing a user, as well as `options` specifying a clientID and clientSecret.
+The Google Plus authentication strategy authenticates users using a Google Plus account and OAuth 2.0 tokens.
+The strategy requires a `verify` callback, which accepts these credentials and calls `next` providing a user, as well as `options` specifying a app ID and app secret.
 
 ```javascript
 passport.use(new GooglePlusTokenStrategy({
@@ -57,16 +57,11 @@ module.exports = {
 };
 ```
 
-### Parameters in request
-
-Based on examples above, you should have route `auth/google`.
-This route accepts 2 parameters: `access_token` and `refresh_token`.
-
-`access_token` is REQUIRED.
+The POST request to this route should include a JSON object with the keys `access_token` and optionally, `refresh_token` set to the credentials you receive from Google Plus.
 
 ## Issues
 
-If you receive a `401 Unauthorized` error, it is most likely because you have wrong access token or not yet specified any application "Permissions".
+If you receive a `401 Unauthorized` error, it is most likely because you have wrong access token or not yet specified any application permissions.
 Once you refresh access token with new permissions, try to send this access token again.
 
 ## License
