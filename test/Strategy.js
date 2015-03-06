@@ -66,7 +66,6 @@ describe('GooglePlusTokenStrategy', function () {
             assert.equal(profile.displayName, 'Andrew Orel');
             assert.equal(profile.name.familyName, 'Orel');
             assert.equal(profile.name.givenName, 'Andrew');
-            assert.equal(profile.gender, 'male');
             assert.equal(profile.photos[0].value, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50');
 
             done();
