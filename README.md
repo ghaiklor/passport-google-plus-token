@@ -1,5 +1,7 @@
 # passport-google-plus-token
 
+[![npm version](https://badge.fury.io/js/passport-google-plus-token.svg)](http://badge.fury.io/js/passport-google-plus-token) [![Build Status](https://travis-ci.org/ghaiklor/passport-google-plus-token.svg?branch=master)](https://travis-ci.org/ghaiklor/passport-google-plus-token)
+
 [Passport](http://passportjs.org/) strategies for authenticating with Google Plus OAuth2 access tokens.
 
 This module lets you authenticate using Google Plus in your Node.js applications by access tokens.
