@@ -1,13 +1,34 @@
 var assert = require('assert'),
+    sinon = require('sinon'),
     GooglePlusTokenStrategy = require('../').Strategy;
 
 describe('GooglePlusTokenStrategy', function () {
-    it('Should has properly name', function () {
-        assert.equal(new GooglePlusTokenStrategy({
+    it('Should properly initialize', function () {
+        var strategy = new GooglePlusTokenStrategy({
             clientID: '123',
             clientSecret: '123'
         }, function () {
-        }).name, 'google-plus-token');
+        });
+
+        assert.equal(strategy.name, 'google-plus-token');
+        assert(strategy._oauth2._useAuthorizationHeaderForGET);
+    });
+
+    it('Should properly authenticate', function (done) {
+        var strategy = new GooglePlusTokenStrategy({
+            clientID: '123',
+            clientSecret: '123'
+        }, function (accessToken, refreshToken, profile, next) {
+            next(null, true, null);
+            done();
+        });
+
+        strategy.authenticate({
+            body: {
+                access_token: 'access_token',
+                refresh_token: 'refresh_token'
+            }
+        }, {});
     });
 
     it('Should properly get profile', function (done) {
