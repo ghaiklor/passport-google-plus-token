@@ -7,7 +7,7 @@
         "test": "test"
     },
     "scripts": {
-        "test": "mocha --recursive"
+        "test": "node ./node_modules/.bin/istanbul cover --report lcovonly ./node_modules/.bin/_mocha -- --recursive --reporter spec"
     },
     "repository": {
         "type": "git",
@@ -27,6 +27,7 @@
     },
     "homepage": "https://github.com/ghaiklor/passport-google-plus-token",
     "devDependencies": {
+        "istanbul": "^0.3.7",
         "mocha": "^2.1.0"
     },
     "dependencies": {
