@@ -50,7 +50,7 @@ describe('GooglePlusTokenStrategy', function () {
         });
     });
 
-    it('Should properly throw exceptions', function (done) {
+    it('Should properly handle exception on fetching profile', function (done) {
         var strategy = new GooglePlusTokenStrategy({
             clientID: '123',
             clientSecret: '123'
