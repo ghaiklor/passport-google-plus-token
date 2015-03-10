@@ -76,4 +76,21 @@ describe('GooglePlusTokenStrategy', function () {
             done();
         });
     });
+
+    it('Should properly throw exceptions', function () {
+        var strategy = new GooglePlusTokenStrategy({
+            clientID: '123',
+            clientSecret: '123'
+        }, function () {
+        });
+
+        strategy._oauth2.get = function (url, accessToken, done) {
+            done(null, 'not a JSON', null);
+        };
+
+        strategy.userProfile('accessToken', function (error, profile) {
+            assert(error instanceof SyntaxError);
+            assert.equal(typeof profile, 'undefined');
+        });
+    });
 });
