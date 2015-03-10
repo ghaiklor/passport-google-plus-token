@@ -1,7 +1,7 @@
 var assert = require('assert'),
     sinon = require('sinon'),
     GooglePlusTokenStrategy = require('../'),
-    fakeProfile = require('./data/profile.json');
+    fakeProfile = JSON.stringify(require('./fixtures/profile.json'));
 
 describe('GooglePlusTokenStrategy', function () {
     it('Should properly export Strategy constructor', function () {
