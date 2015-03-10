@@ -1,5 +1,4 @@
 var assert = require('assert'),
-    sinon = require('sinon'),
     GooglePlusTokenStrategy = require('../'),
     fakeProfile = JSON.stringify(require('./fixtures/profile.json'));
 
