@@ -77,7 +77,7 @@ describe('GooglePlusTokenStrategy', function () {
         });
     });
 
-    it('Should properly throw exceptions', function () {
+    it('Should properly throw exceptions', function (done) {
         var strategy = new GooglePlusTokenStrategy({
             clientID: '123',
             clientSecret: '123'
@@ -91,6 +91,7 @@ describe('GooglePlusTokenStrategy', function () {
         strategy.userProfile('accessToken', function (error, profile) {
             assert(error instanceof SyntaxError);
             assert.equal(typeof profile, 'undefined');
+            done();
         });
     });
 });
