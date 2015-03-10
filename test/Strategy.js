@@ -29,8 +29,8 @@ describe('GooglePlusTokenStrategy', function () {
             next(null, profile, null);
         });
 
-        strategy._oauth2.get = function (url, accessToken, done) {
-            done(null, fakeProfile, null);
+        strategy._oauth2.get = function (url, accessToken, next) {
+            next(null, fakeProfile, null);
         };
 
         strategy.userProfile('accessToken', function (error, profile) {
@@ -41,7 +41,10 @@ describe('GooglePlusTokenStrategy', function () {
             assert.equal(profile.displayName, 'Andrew Orel');
             assert.equal(profile.name.familyName, 'Orel');
             assert.equal(profile.name.givenName, 'Andrew');
+            assert.deepEqual(profile.emails, []);
             assert.equal(profile.photos[0].value, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50');
+            assert.equal(typeof profile._raw, 'string');
+            assert.equal(typeof profile._json, 'object');
 
             done();
         });
