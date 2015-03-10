@@ -1,4 +1,4 @@
-var Strategy = require('./lib/strategy');
+var Strategy = require('./lib/Strategy');
 
 module.exports = Strategy;
 module.exports.Strategy = Strategy;
