@@ -3,45 +3,7 @@ var assert = require('assert'),
     GooglePlusTokenStrategy = require('../').Strategy;
 
 describe('GooglePlusTokenStrategy', function () {
-    it('Should properly initialize', function () {
-        var strategy = new GooglePlusTokenStrategy({
-            clientID: '123',
-            clientSecret: '123'
-        }, function () {
-        });
-
-        assert.equal(strategy.name, 'google-plus-token');
-        assert(strategy._oauth2._useAuthorizationHeaderForGET);
-    });
-
-    it('Should properly authenticate', function (done) {
-        var strategy = new GooglePlusTokenStrategy({
-            clientID: '123',
-            clientSecret: '123'
-        }, function (accessToken, refreshToken, profile, next) {
-            next(null, true, null);
-            done();
-        });
-
-        done();
-        // TODO: write test
-        //strategy.authenticate({
-        //    body: {
-        //        access_token: 'access_token',
-        //        refresh_token: 'refresh_token'
-        //    }
-        //}, {});
-    });
-
-    it('Should properly get profile', function (done) {
-        var strategy = new GooglePlusTokenStrategy({
-            clientID: '123',
-            clientSecret: '123'
-        }, function () {
-        });
-
-        strategy._oauth2.get = function (url, accessToken, done) {
-            var body = '{ \
+    var fakeProfile = '{ \
                 "kind": "plus#person", \
                 "displayName": "Andrew Orel", \
                 "name": { \
@@ -78,7 +40,27 @@ describe('GooglePlusTokenStrategy', function () {
                 "objectType": "person" \
             }';
 
-            done(null, body, null);
+    it('Should properly initialize', function () {
+        var strategy = new GooglePlusTokenStrategy({
+            clientID: '123',
+            clientSecret: '123'
+        }, function () {
+        });
+
+        assert.equal(strategy.name, 'google-plus-token');
+        assert(strategy._oauth2._useAuthorizationHeaderForGET);
+    });
+
+    it('Should properly fetch profile', function (done) {
+        var strategy = new GooglePlusTokenStrategy({
+            clientID: '123',
+            clientSecret: '123'
+        }, function (accessToken, refreshToken, profile, next) {
+            next(null, profile, null);
+        });
+
+        strategy._oauth2.get = function (url, accessToken, done) {
+            done(null, fakeProfile, null);
         };
 
         strategy.userProfile('accessToken', function (error, profile) {
