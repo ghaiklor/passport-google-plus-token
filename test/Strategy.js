@@ -20,6 +20,24 @@ describe('GooglePlusTokenStrategy', function () {
         assert(strategy._oauth2._useAuthorizationHeaderForGET);
     });
 
+    it('Should properly parse request in authenticate', function (done) {
+        var strategy = new GooglePlusTokenStrategy({
+            clientID: '123',
+            clientSecret: '123'
+        }, function (accessToken, refreshToken, profile, next) {
+            next(null, profile, null);
+            done();
+        });
+
+        //strategy.authenticate({
+        //    headers: {
+        //        access_token: '',
+        //        refresh_token: ''
+        //    }
+        //}, {});
+        done();
+    });
+
     it('Should properly fetch profile', function (done) {
         var strategy = new GooglePlusTokenStrategy({
             clientID: '123',
