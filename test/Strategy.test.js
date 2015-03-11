@@ -3,7 +3,7 @@ var chai = require('chai'),
     GooglePlusTokenStrategy = require('../'),
     fakeProfile = JSON.stringify(require('./fixtures/profile.json'));
 
-describe('GooglePlusTokenStrategy', function () {
+describe('GooglePlusTokenStrategy:init', function () {
     it('Should properly export Strategy constructor', function () {
         assert.equal(typeof GooglePlusTokenStrategy, 'function');
         assert.equal(typeof GooglePlusTokenStrategy.Strategy, 'function');
@@ -20,32 +20,35 @@ describe('GooglePlusTokenStrategy', function () {
         assert.equal(strategy.name, 'google-plus-token');
         assert(strategy._oauth2._useAuthorizationHeaderForGET);
     });
+});
 
-    describe('GooglePlusTokenStrategy:authenticate', function () {
-        var strategy,
-            user,
-            info;
+describe('GooglePlusTokenStrategy:authenticate', function () {
+    describe('Authenticate without passReqToCallback', function () {
+        var strategy;
 
-        before(function (done) {
+        before(function () {
             strategy = new GooglePlusTokenStrategy({
                 clientID: '123',
                 clientSecret: '123'
             }, function (accessToken, refreshToken, profile, next) {
-                if (accessToken == 'access_token' && refreshToken == 'refresh_token') {
-                    return next(null, profile, {info: 'foo'});
-                }
-
-                return next(null, false, null);
+                assert.equal(accessToken, 'access_token');
+                assert.equal(refreshToken, 'refresh_token');
+                assert.typeOf(profile, 'object');
+                assert.typeOf(next, 'function');
+                return next(null, profile, {info: 'foo'});
             });
 
-            strategy._oauth2.get = function (url, accessToken, done) {
-                done(null, fakeProfile, null);
+            strategy._oauth2.get = function (url, accessToken, next) {
+                next(null, fakeProfile, null);
             };
+        });
 
+        it('Should properly parse access_token', function (done) {
             chai.passport.use(strategy)
-                .success(function (u, i) {
-                    user = u;
-                    info = i;
+                .success(function (user, info) {
+                    assert.typeOf(user, 'object');
+                    assert.typeOf(info, 'object');
+                    assert.deepEqual(info, {info: 'foo'});
                     done();
                 })
                 .req(function (req) {
@@ -57,19 +60,65 @@ describe('GooglePlusTokenStrategy', function () {
                 .authenticate({});
         });
 
-        it('Should properly respond with profile', function () {
-            assert.typeOf(user, 'object');
-            assert.typeOf(info, 'object');
-            assert.deepEqual(info, {info: 'foo'});
+        it('Should properly call fail if access_token is not provided', function (done) {
+            chai.passport.use(strategy)
+                .fail(function (error) {
+                    assert.typeOf(error, 'object');
+                    assert.typeOf(error.message, 'string');
+                    assert.equal(error.message, 'You should provide access_token');
+                    done();
+                })
+                .authenticate();
         });
     });
 
+    describe('Authenticate with passReqToCallback', function () {
+        var strategy;
+
+        before(function () {
+            strategy = new GooglePlusTokenStrategy({
+                clientID: '123',
+                clientSecret: '123',
+                passReqToCallback: true
+            }, function (req, accessToken, refreshToken, profile, next) {
+                assert.typeOf(req, 'object');
+                assert.equal(accessToken, 'access_token');
+                assert.equal(refreshToken, 'refresh_token');
+                assert.typeOf(profile, 'object');
+                assert.typeOf(next, 'function');
+                return next(null, profile, {info: 'foo'});
+            });
+
+            strategy._oauth2.get = function (url, accessToken, next) {
+                next(null, fakeProfile, null);
+            }
+        });
+
+        it('Should properly call _verify with req', function (done) {
+            chai.passport.use(strategy)
+                .success(function (user, info) {
+                    assert.typeOf(user, 'object');
+                    assert.typeOf(info, 'object');
+                    assert.deepEqual(info, {info: 'foo'});
+                    done();
+                })
+                .req(function (req) {
+                    req.body = {
+                        access_token: 'access_token',
+                        refresh_token: 'refresh_token'
+                    }
+                })
+                .authenticate({});
+        });
+    });
+});
+
+describe('GooglePlusTokenStrategy:userProfile', function () {
     it('Should properly fetch profile', function (done) {
         var strategy = new GooglePlusTokenStrategy({
             clientID: '123',
             clientSecret: '123'
-        }, function (accessToken, refreshToken, profile, next) {
-            next(null, profile, null);
+        }, function () {
         });
 
         strategy._oauth2.get = function (url, accessToken, next) {
