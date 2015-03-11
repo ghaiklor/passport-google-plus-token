@@ -7,7 +7,7 @@
         "test": "test"
     },
     "scripts": {
-        "test": "istanbul cover --report lcovonly _mocha -- --recursive --reporter spec"
+        "test": "istanbul cover --report lcovonly _mocha -- --recursive --reporter spec --require ./test/bootstrap ./test/*.test.js"
     },
     "repository": {
         "type": "git",
