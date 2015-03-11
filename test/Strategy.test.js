@@ -1,4 +1,5 @@
-var assert = require('chai').assert,
+var chai = require('chai'),
+    assert = chai.assert,
     GooglePlusTokenStrategy = require('../'),
     fakeProfile = JSON.stringify(require('./fixtures/profile.json'));
 
@@ -20,22 +21,47 @@ describe('GooglePlusTokenStrategy', function () {
         assert(strategy._oauth2._useAuthorizationHeaderForGET);
     });
 
-    it('Should properly parse request in authenticate', function (done) {
-        var strategy = new GooglePlusTokenStrategy({
-            clientID: '123',
-            clientSecret: '123'
-        }, function (accessToken, refreshToken, profile, next) {
-            next(null, profile, null);
-            done();
+    describe('GooglePlusTokenStrategy:authenticate', function () {
+        var strategy,
+            user,
+            info;
+
+        before(function (done) {
+            strategy = new GooglePlusTokenStrategy({
+                clientID: '123',
+                clientSecret: '123'
+            }, function (accessToken, refreshToken, profile, next) {
+                if (accessToken == 'access_token' && refreshToken == 'refresh_token') {
+                    return next(null, profile, {info: 'foo'});
+                }
+
+                return next(null, false, null);
+            });
+
+            strategy._oauth2.get = function (url, accessToken, done) {
+                done(null, fakeProfile, null);
+            };
+
+            chai.passport.use(strategy)
+                .success(function (u, i) {
+                    user = u;
+                    info = i;
+                    done();
+                })
+                .req(function (req) {
+                    req.headers = {
+                        access_token: 'access_token',
+                        refresh_token: 'refresh_token'
+                    }
+                })
+                .authenticate({});
         });
 
-        //strategy.authenticate({
-        //    headers: {
-        //        access_token: '',
-        //        refresh_token: ''
-        //    }
-        //}, {});
-        done();
+        it('Should properly respond with profile', function () {
+            assert.typeOf(user, 'object');
+            assert.typeOf(info, 'object');
+            assert.deepEqual(info, {info: 'foo'});
+        });
     });
 
     it('Should properly fetch profile', function (done) {
