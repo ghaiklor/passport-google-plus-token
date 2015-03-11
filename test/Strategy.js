@@ -1,4 +1,4 @@
-var assert = require('assert'),
+var assert = require('chai').assert,
     GooglePlusTokenStrategy = require('../'),
     fakeProfile = JSON.stringify(require('./fixtures/profile.json'));
 

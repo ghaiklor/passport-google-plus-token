@@ -28,6 +28,8 @@
     },
     "homepage": "https://github.com/ghaiklor/passport-google-plus-token",
     "devDependencies": {
+        "chai": "^2.1.1",
+        "chai-passport-strategy": "^0.2.0",
         "istanbul": "^0.3.7",
         "mocha": "^2.1.0"
     },
