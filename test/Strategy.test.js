@@ -128,7 +128,7 @@ describe('GooglePlusTokenStrategy:userProfile', function () {
         strategy.userProfile('accessToken', function (error, profile) {
             if (error) return done(error);
 
-            assert.equal(profile.provider, 'google-plus');
+            assert.equal(profile.provider, 'google');
             assert.equal(profile.id, '103819813774047251222');
             assert.equal(profile.displayName, 'Andrew Orel');
             assert.equal(profile.name.familyName, 'Orel');
