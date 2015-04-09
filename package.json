@@ -1,7 +1,7 @@
 {
   "name": "passport-google-plus-token",
-  "version": "1.5.1",
-  "description": "Google Plus token authentication strategy for Passport",
+  "version": "1.6.0",
+  "description": "Passport strategy for authenticating with Google Plus via OAuth2 access tokens",
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover _mocha"
