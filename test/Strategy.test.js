@@ -20,6 +20,12 @@ describe('GooglePlusTokenStrategy:init', function () {
     assert.equal(strategy.name, 'google-plus-token');
     assert(strategy._oauth2._useAuthorizationHeaderForGET);
   });
+
+  it('Should properly throw error on empty options', function () {
+    assert.throws(function () {
+      new GooglePlusTokenStrategy();
+    });
+  });
 });
 
 describe('GooglePlusTokenStrategy:authenticate', function () {
@@ -43,7 +49,7 @@ describe('GooglePlusTokenStrategy:authenticate', function () {
       };
     });
 
-    it('Should properly parse access_token', function (done) {
+    it('Should properly parse access_token from headers', function (done) {
       chai.passport.use(strategy)
         .success(function (user, info) {
           assert.typeOf(user, 'object');
@@ -52,6 +58,7 @@ describe('GooglePlusTokenStrategy:authenticate', function () {
           done();
         })
         .req(function (req) {
+          req.query = {};
           req.headers = {
             access_token: 'access_token',
             refresh_token: 'refresh_token'
@@ -156,6 +163,70 @@ describe('GooglePlusTokenStrategy:userProfile', function () {
     strategy.userProfile('accessToken', function (error, profile) {
       assert(error instanceof SyntaxError);
       assert.equal(typeof profile, 'undefined');
+      done();
+    });
+  });
+
+  it('Should properly handle wrong JSON on fetching profile', function (done) {
+    var strategy = new GooglePlusTokenStrategy({
+      clientID: '123',
+      clientSecret: '123'
+    }, function () {
+    });
+
+    strategy._oauth2.get = function (url, accessToken, done) {
+      done(new Error('ERROR'), 'not a JSON', null);
+    };
+
+    strategy.userProfile('accessToken', function (error, profile) {
+      assert.instanceOf(error, Error);
+      assert.equal(typeof profile, 'undefined');
+      done();
+    });
+  });
+
+  it('Should properly handle wrong JSON on fetching profile', function (done) {
+    var strategy = new GooglePlusTokenStrategy({
+      clientID: '123',
+      clientSecret: '123'
+    }, function () {
+    });
+
+    strategy._oauth2.get = function (url, accessToken, done) {
+      done({data: JSON.stringify({error: {message: 'MESSAGE', code: 'CODE'}})}, 'not a JSON', null);
+    };
+
+    strategy.userProfile('accessToken', function (error, profile) {
+      assert.equal(error.message, 'MESSAGE');
+      assert.equal(error.oauthError, 'CODE');
+      assert.equal(typeof profile, 'undefined');
+      done();
+    });
+  });
+
+  it('Should properly parse profile with empty response', function (done) {
+    var strategy = new GooglePlusTokenStrategy({
+      clientID: '123',
+      clientSecret: '123'
+    }, function () {
+    });
+
+    strategy._oauth2.get = function (url, accessToken, done) {
+      done(null, JSON.stringify({}), null);
+    };
+
+    strategy.userProfile('accessToken', function (error, profile) {
+      assert.deepEqual(profile, {
+        provider: 'google-plus',
+        id: undefined,
+        displayName: '',
+        name: {familyName: '', givenName: ''},
+        emails: [],
+        photos: [{value: ''}],
+        _raw: '{}',
+        _json: {}
+      });
+
       done();
     });
   });
