@@ -43,7 +43,6 @@ export default class GooglePlusTokenStrategy extends OAuth2Strategy {
     this._refreshTokenField = options.refreshTokenField || 'refresh_token';
     this._profileURL = options.profileURL || 'https://www.googleapis.com/plus/v1/people/me';
     this._passReqToCallback = options.passReqToCallback;
-    this._enableProof = typeof options.enableProof === 'boolean' ? options.enableProof : true;
     this._oauth2._useAuthorizationHeaderForGET = true;
   }
 
