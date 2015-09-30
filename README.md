@@ -1,6 +1,13 @@
 # passport-google-plus-token
 
-![Build Status](https://img.shields.io/travis/ghaiklor/passport-google-plus-token.svg) ![Coverage](https://img.shields.io/coveralls/ghaiklor/passport-google-plus-token.svg) ![Downloads](https://img.shields.io/npm/dm/passport-google-plus-token.svg) ![npm version](https://img.shields.io/npm/v/passport-google-plus-token.svg) ![dependencies](https://img.shields.io/david/ghaiklor/passport-google-plus-token.svg) ![dev dependencies](https://img.shields.io/david/dev/ghaiklor/passport-google-plus-token.svg) ![License](https://img.shields.io/npm/l/passport-google-plus-token.svg)
+![Build Status](https://img.shields.io/travis/ghaiklor/passport-google-plus-token.svg)
+![Coverage](https://img.shields.io/coveralls/ghaiklor/passport-google-plus-token.svg)
+![Downloads](https://img.shields.io/npm/dm/passport-google-plus-token.svg)
+![Downloads](https://img.shields.io/npm/dt/passport-google-plus-token.svg)
+![npm version](https://img.shields.io/npm/v/passport-google-plus-token.svg)
+![dependencies](https://img.shields.io/david/ghaiklor/passport-google-plus-token.svg)
+![dev dependencies](https://img.shields.io/david/dev/ghaiklor/passport-google-plus-token.svg)
+![License](https://img.shields.io/npm/l/passport-google-plus-token.svg)
 
 [Passport](http://passportjs.org/) strategy for authenticating with [Google Plus](https://plus.google.com/) access tokens using the OAuth 2.0 API.
 

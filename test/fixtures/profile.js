@@ -1,4 +1,4 @@
-{
+export default JSON.stringify({
   "kind": "plus#person",
   "displayName": "Andrew Orel",
   "name": {
@@ -33,4 +33,4 @@
   "circledByCount": 4,
   "id": "103819813774047251222",
   "objectType": "person"
-}
+});
