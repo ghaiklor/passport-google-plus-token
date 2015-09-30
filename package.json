@@ -2,7 +2,7 @@
   "name": "passport-google-plus-token",
   "version": "2.0.0",
   "description": "Passport strategy for authenticating with Google Plus via OAuth2 access tokens",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "compile": "babel src --out-dir lib",
     "prepublish": "npm run compile",
