@@ -29,12 +29,12 @@
   },
   "homepage": "https://github.com/ghaiklor/passport-google-plus-token",
   "devDependencies": {
-    "chai": "^2.1.1",
-    "chai-passport-strategy": "^0.2.0",
-    "istanbul": "^0.3.7",
-    "mocha": "^2.1.0"
+    "chai": "2.3.0",
+    "chai-passport-strategy": "0.2.0",
+    "istanbul": "0.3.21",
+    "mocha": "2.3.3"
   },
   "dependencies": {
-    "passport-oauth": "^1.0.0"
+    "passport-oauth": "1.0.0"
   }
 }
