@@ -24,7 +24,7 @@ describe('GooglePlusTokenStrategy:init', () => {
   });
 
   it('Should properly throw error on empty options', () => {
-    assert.throws(() => new GooglePlusTokenStrategy());
+    assert.throws(() => new GooglePlusTokenStrategy(), Error);
   });
 });
 
@@ -44,6 +44,40 @@ describe('GooglePlusTokenStrategy:authenticate', () => {
       sinon.stub(strategy._oauth2, 'get', (url, accessToken, next) => next(null, fakeProfile, null));
     });
 
+    it('Should properly parse token from body', done => {
+      chai.passport.use(strategy)
+        .success((user, info) => {
+          assert.typeOf(user, 'object');
+          assert.typeOf(info, 'object');
+          assert.deepEqual(info, {info: 'foo'});
+          done();
+        })
+        .req(req => {
+          req.body = {
+            access_token: 'access_token',
+            refresh_token: 'refresh_token'
+          }
+        })
+        .authenticate();
+    });
+
+    it('Should properly parse token from query', done => {
+      chai.passport.use(strategy)
+        .success((user, info) => {
+          assert.typeOf(user, 'object');
+          assert.typeOf(info, 'object');
+          assert.deepEqual(info, {info: 'foo'});
+          done();
+        })
+        .req(req => {
+          req.query = {
+            access_token: 'access_token',
+            refresh_token: 'refresh_token'
+          }
+        })
+        .authenticate();
+    });
+
     it('Should properly call fail if access_token is not provided', done => {
       chai.passport.use(strategy)
         .fail(error => {
@@ -60,11 +94,7 @@ describe('GooglePlusTokenStrategy:authenticate', () => {
     let strategy;
 
     before(() => {
-      strategy = new GooglePlusTokenStrategy({
-        clientID: '123',
-        clientSecret: '123',
-        passReqToCallback: true
-      }, (req, accessToken, refreshToken, profile, next) => {
+      strategy = new GooglePlusTokenStrategy(Object.assign(STRATEGY_CONFIG, {passReqToCallback: true}), (req, accessToken, refreshToken, profile, next) => {
         assert.typeOf(req, 'object');
         assert.equal(accessToken, 'access_token');
         assert.equal(refreshToken, 'refresh_token');
