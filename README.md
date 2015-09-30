@@ -64,7 +64,11 @@ module.exports = {
 };
 ```
 
-The POST request to this route should include a JSON object with the keys `access_token` and optionally, `refresh_token` set to the credentials you receive from Google Plus.
+The request to this route should include GET or POST data with the keys `access_token` and optionally, `refresh_token` set to the credentials you receive from Google Plus.
+
+```
+GET /auth/google?access_token=<GOOGLE_TOKEN>
+```
 
 ## Issues
 
