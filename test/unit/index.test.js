@@ -44,24 +44,6 @@ describe('GooglePlusTokenStrategy:authenticate', () => {
       sinon.stub(strategy._oauth2, 'get', (url, accessToken, next) => next(null, fakeProfile, null));
     });
 
-    it('Should properly parse access_token from headers', done => {
-      chai.passport.use(strategy)
-        .success((user, info) => {
-          assert.typeOf(user, 'object');
-          assert.typeOf(info, 'object');
-          assert.deepEqual(info, {info: 'foo'});
-          done();
-        })
-        .req(req => {
-          req.query = {};
-          req.headers = {
-            access_token: 'access_token',
-            refresh_token: 'refresh_token'
-          }
-        })
-        .authenticate({});
-    });
-
     it('Should properly call fail if access_token is not provided', done => {
       chai.passport.use(strategy)
         .fail(error => {
