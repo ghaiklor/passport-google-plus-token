@@ -28,6 +28,8 @@ The Google Plus authentication strategy authenticates users using a Google Plus 
 The strategy requires a `verify` callback, which accepts these credentials and calls `next` providing a user, as well as `options` specifying a app ID and app secret.
 
 ```javascript
+var GooglePlusTokenStrategy = require('passport-google-plus-token');
+
 passport.use(new GooglePlusTokenStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,

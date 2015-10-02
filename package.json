@@ -1,6 +1,6 @@
 {
   "name": "passport-google-plus-token",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Passport strategy for authenticating with Google Plus via OAuth2 access tokens",
   "main": "lib/index.js",
   "scripts": {
@@ -30,6 +30,9 @@
     "url": "https://github.com/ghaiklor/passport-google-plus-token/issues"
   },
   "homepage": "https://github.com/ghaiklor/passport-google-plus-token",
+  "dependencies": {
+    "passport-oauth": "1.0.0"
+  },
   "devDependencies": {
     "babel": "5.8.23",
     "chai": "2.3.0",
@@ -37,8 +40,5 @@
     "istanbul": "0.3.21",
     "mocha": "2.3.3",
     "sinon": "1.17.1"
-  },
-  "dependencies": {
-    "passport-oauth": "1.0.0"
   }
 }
