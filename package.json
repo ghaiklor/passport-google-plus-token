@@ -41,7 +41,7 @@
     "coveralls": "2.11.4",
     "cz-conventional-changelog": "1.1.4",
     "isparta": "3.5.3",
-    "mocha": "2.3.3",
+    "mocha": "2.3.4",
     "semantic-release": "4.3.5",
     "sinon": "1.17.2"
   },
