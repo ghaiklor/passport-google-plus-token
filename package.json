@@ -35,12 +35,13 @@
     "passport-oauth": "1.0.0"
   },
   "devDependencies": {
-    "babel": "5.8.34",
+    "babel-cli": "6.2.0",
+    "babel-preset-es2015-node4": "2.0.1",
     "chai": "3.4.1",
     "chai-passport-strategy": "0.2.0",
     "coveralls": "2.11.4",
     "cz-conventional-changelog": "1.1.4",
-    "isparta": "3.5.3",
+    "isparta": "4.0.0",
     "mocha": "2.3.4",
     "semantic-release": "4.3.5",
     "sinon": "1.17.2"
