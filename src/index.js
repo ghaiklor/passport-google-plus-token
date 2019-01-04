@@ -1,4 +1,5 @@
 import { OAuth2Strategy, InternalOAuthError } from 'passport-oauth';
+import parse from './profile/openid'
 
 /**
  * `Strategy` constructor.
@@ -16,7 +17,7 @@ import { OAuth2Strategy, InternalOAuthError } from 'passport-oauth';
  * @param {Function} _verify
  * @constructor
  * @example
- * passport.use(new GooglePlusTokenStrategy({
+ * passport.use(new GoogleTokenStrategy({
  *   clientID: '123456789',
  *   clientSecret: 'shhh-its-a-secret'
  * }), function(req, accessToken, refreshToken, profile, next) {
@@ -25,20 +26,20 @@ import { OAuth2Strategy, InternalOAuthError } from 'passport-oauth';
  *   });
  * });
  */
-export default class GooglePlusTokenStrategy extends OAuth2Strategy {
+export default class GoogleTokenStrategy extends OAuth2Strategy {
   constructor(_options, _verify) {
     let options = _options || {};
     let verify = _verify;
 
-    options.authorizationURL = options.authorizationURL || 'https://accounts.google.com/o/oauth2/auth';
-    options.tokenURL = options.tokenURL || 'https://accounts.google.com/o/oauth2/token';
+    options.authorizationURL = options.authorizationURL || 'https://accounts.google.com/o/oauth2/v2/auth';
+    options.tokenURL = options.tokenURL || 'https://www.googleapis.com/oauth2/v4/token';
 
     super(options, verify);
 
     this.name = 'google-plus-token';
     this._accessTokenField = options.accessTokenField || 'access_token';
     this._refreshTokenField = options.refreshTokenField || 'refresh_token';
-    this._profileURL = options.profileURL || 'https://www.googleapis.com/plus/v1/people/me';
+    this._profileURL = options.profileURL || 'https://www.googleapis.com/oauth2/v3/userinfo';
     this._passReqToCallback = options.passReqToCallback;
 
     this._oauth2.useAuthorizationHeaderforGET(true);
@@ -66,6 +67,7 @@ export default class GooglePlusTokenStrategy extends OAuth2Strategy {
         return this.success(user, info);
       };
 
+
       if (this._passReqToCallback) {
         this._verify(req, accessToken, refreshToken, profile, verified);
       } else {
@@ -89,24 +91,17 @@ export default class GooglePlusTokenStrategy extends OAuth2Strategy {
           return done(new InternalOAuthError('Failed to fetch user profile', error));
         }
       }
+      let json;
+      try {
+        json = JSON.parse(body);
+      } catch (ex) {
+        return done(new Error('Failed to parse user profile'));
+      }
 
       try {
-        let json = JSON.parse(body);
-        let profile = {
-          provider: 'google-plus',
-          id: json.id,
-          displayName: json.displayName || '',
-          name: {
-            familyName: (json.name && json.name.familyName) || '',
-            givenName: (json.name && json.name.givenName) || ''
-          },
-          emails: json.emails || [],
-          photos: [{
-            value: (json.image && json.image.url) || ''
-          }],
-          _raw: body,
-          _json: json
-        };
+        const profile = parse(json)
+        profile._raw = body
+        profile._json = json
 
         return done(null, profile);
       } catch (e) {
