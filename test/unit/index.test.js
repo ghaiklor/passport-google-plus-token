@@ -134,13 +134,13 @@ describe('GooglePlusTokenStrategy:userProfile', () => {
     strategy.userProfile('accessToken', (error, profile) => {
       if (error) return done(error);
 
-      assert.equal(profile.provider, 'google-plus');
-      assert.equal(profile.id, '103819813774047251222');
-      assert.equal(profile.displayName, 'Andrew Orel');
-      assert.equal(profile.name.familyName, 'Orel');
-      assert.equal(profile.name.givenName, 'Andrew');
-      assert.deepEqual(profile.emails, []);
-      assert.equal(profile.photos[0].value, 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50');
+      assert.equal(profile.provider, 'google');
+      assert.equal(profile.id, '106322344677401150228');
+      assert.equal(profile.displayName, 'Luke Skywalker');
+      assert.equal(profile.name.familyName, 'Skywalker');
+      assert.equal(profile.name.givenName, 'Luke');
+      assert.deepEqual(profile.emails, [{ value: 'luke.skywalker@rebellion.com', verified: true  }]);
+      assert.equal(profile.photos[0].value, 'https://lh5.googleusercontent.com/-maynzk6pE7A/AAAAAAAAAAI/AAAAAAAAAAc/xBkkM5n-gds/photo.jpg');
       assert.equal(typeof profile._raw, 'string');
       assert.equal(typeof profile._json, 'object');
 
@@ -154,7 +154,7 @@ describe('GooglePlusTokenStrategy:userProfile', () => {
     sinon.stub(strategy._oauth2, 'get', (url, accessToken, done) => done(null, 'not a JSON', null));
 
     strategy.userProfile('accessToken', (error, profile) => {
-      assert(error instanceof SyntaxError);
+      assert(error.message === 'Failed to parse user profile');
       assert.equal(typeof profile, 'undefined');
       done();
     });
@@ -192,24 +192,4 @@ describe('GooglePlusTokenStrategy:userProfile', () => {
     });
   });
 
-  it('Should properly parse profile with empty response', done => {
-    let strategy = new GooglePlusTokenStrategy(STRATEGY_CONFIG, BLANK_FUNCTION);
-
-    sinon.stub(strategy._oauth2, 'get', (url, accessToken, done) => done(null, JSON.stringify({}), null));
-
-    strategy.userProfile('accessToken', (error, profile) => {
-      assert.deepEqual(profile, {
-        provider: 'google-plus',
-        id: undefined,
-        displayName: '',
-        name: {familyName: '', givenName: ''},
-        emails: [],
-        photos: [{value: ''}],
-        _raw: '{}',
-        _json: {}
-      });
-
-      done();
-    });
-  });
 });
