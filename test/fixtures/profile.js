@@ -1,4 +1,4 @@
-export default JSON.stringify({
+module.exports = JSON.stringify({
   "sub": "106322344677401150228",
   "name": "Luke Skywalker",
   "given_name": "Luke",
