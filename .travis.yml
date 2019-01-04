@@ -7,10 +7,9 @@ notifications:
   email: true
 node_js:
   - stable
-  - 5
-  - 4
-  - 0.12
-  - 0.10
+  - 10
+  - 8
+  - 6
 before_install:
   - npm install -g npm@latest
 before_script:
